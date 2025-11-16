@@ -1,4 +1,4 @@
-# 🌍 ALX Travel App
+# 🌍 ALX Travel App.
 
 <div align="center">
 
