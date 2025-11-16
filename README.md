@@ -10,6 +10,9 @@
 
 *A production-ready Django REST API for travel listing platform*
 
+**✨ Milestone 2 Completed: Models, Serializers & Database Seeding ✨**
+
+[Milestone 2](#-milestone-2-creating-models-serializers-and-seeders) •
 [Features](#5-feature-breakdown) •
 [Tech Stack](#3-technology-stack-overview) •
 [Installation](#getting-started) •
@@ -22,6 +25,7 @@
 
 ## 📜 Table of Contents
 
+* [📌 Milestone 2: Creating Models, Serializers, and Seeders](#-milestone-2-creating-models-serializers-and-seeders)
 * [1. Project Overview](#1-project-overview)
 * [2. Team Roles and Responsibilities](#2-team-roles-and-responsibilities)
 * [3. Technology Stack Overview](#3-technology-stack-overview)
@@ -32,6 +36,113 @@
 * [8. Resources](#8-resources)
 * [9. License](#9-license)
 * [10. Created By](#10-created-by)
+
+---
+
+## 📌 Milestone 2: Creating Models, Serializers, and Seeders
+
+<div align="center">
+
+![Status](https://img.shields.io/badge/Status-Completed-success.svg?style=for-the-badge)
+![Weight](https://img.shields.io/badge/Weight-1-blue.svg?style=for-the-badge)
+![Deadline](https://img.shields.io/badge/Deadline-Nov%2017%2C%202025-red.svg?style=for-the-badge)
+
+</div>
+
+### 🎯 Overview
+
+This milestone focuses on building essential backend components in Django by defining database models, setting up serializers for API data representation, and implementing a management command to seed the database with sample data. Through this practical implementation, we've created a solid foundation for a production-ready travel listing platform.
+
+### 🎓 Learning Objectives Achieved
+
+✅ **Model Relational Data** - Successfully modeled data in Django using appropriate fields, relationships, and constraints  
+✅ **Create API Serializers** - Transformed Django model instances into JSON for API responses using Django REST Framework  
+✅ **Implement Management Commands** - Automated database seeding with custom Django management commands  
+✅ **Test Database Population** - Validated database population using Django's command-line tools  
+
+### 🏗️ Implementation Highlights
+
+#### 📊 Database Models
+
+We've implemented three core models with proper relationships and constraints:
+
+**1. Listing Model** - Properties available for booking
+```python
+- title, description, location
+- price_per_night (with validation)
+- max_guests, bedrooms, bathrooms
+- ForeignKey relationship to User (host)
+- Automatic timestamps (created_at, updated_at)
+```
+
+**2. Booking Model** - Customer reservations
+```python
+- ForeignKey to Listing and User (guest)
+- check_in, check_out dates
+- total_price calculation
+- Unique constraint on listing + dates
+```
+
+**3. Review Model** - User feedback and ratings
+```python
+- OneToOne relationship with Booking
+- Rating (1-5 stars with validation)
+- Comment field for detailed feedback
+- Automatic timestamp tracking
+```
+
+#### 🔄 API Serializers
+
+Created robust serializers using Django REST Framework:
+
+- **ListingSerializer** - Transforms Listing objects to JSON with nested host information
+- **BookingSerializer** - Handles complex booking data with nested listing details
+- Proper read-only and write-only field configurations
+- Automatic validation for all input data
+
+#### 🌱 Database Seeding
+
+Implemented a custom management command for efficient database population:
+
+```bash
+# Seed with default values (15 listings, 30 bookings)
+python manage.py seed
+
+# Custom seeding with specific counts
+python manage.py seed --listings 50 --bookings 100
+```
+
+**Features:**
+- Randomized realistic travel listing data
+- Multiple Kenyan locations (Nairobi, Mombasa, Kisumu, etc.)
+- Variety of property types and descriptions
+- Automatic demo user creation
+- Prevents duplicate bookings
+- Configurable counts via command-line arguments
+
+### 📁 Key Files
+
+| File Path | Purpose |
+|-----------|---------|
+| `listings/models.py` | Database model definitions (Listing, Booking, Review) |
+| `listings/serializers.py` | DRF serializers for API data transformation |
+| `listings/management/commands/seed.py` | Custom management command for database seeding |
+
+### 🚀 Real-World Application
+
+This implementation mirrors production systems where:
+- **Travel platforms** need structured data for properties, bookings, and reviews
+- **API endpoints** deliver data to mobile and web clients via serializers
+- **Development teams** use seeded data to test features without manual data entry
+- **Database relationships** ensure data integrity and enable complex queries
+
+### 📚 Additional Resources
+
+- [Django Models Documentation](https://docs.djangoproject.com/en/4.2/topics/db/models/)
+- [Relationships in Django](https://docs.djangoproject.com/en/4.2/topics/db/models/#relationships)
+- [Django REST Framework Serializers](https://www.django-rest-framework.org/api-guide/serializers/)
+- [Data Seeding & Initial Data](https://docs.djangoproject.com/en/4.2/howto/initial-data/)
+- [Using django-seed](https://github.com/Brobin/django-seed)
 
 ---
 
@@ -256,12 +367,21 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-8. **Run development server**
+8. **Seed the database with sample data** (Optional but recommended)
+```bash
+# Seed with default values (15 listings, 30 bookings)
+python manage.py seed
+
+# Or specify custom counts
+python manage.py seed --listings 50 --bookings 100
+```
+
+9. **Run development server**
 ```bash
 python manage.py runserver
 ```
 
-9. **Access the application**
+10. **Access the application**
 * API: http://localhost:8000/api/
 * Admin: http://localhost:8000/admin/
 * Swagger: http://localhost:8000/swagger/
@@ -303,11 +423,14 @@ alx_travel_app/
 │   └── asgi.py              # ASGI configuration
 ├── listings/                # Listings app
 │   ├── migrations/          # Database migrations
+│   ├── management/          # Custom management commands
+│   │   └── commands/
+│   │       └── seed.py      # 🌱 Database seeding command
 │   ├── __init__.py
 │   ├── admin.py             # Admin interface configuration
 │   ├── apps.py              # App configuration
-│   ├── models.py            # Database models
-│   ├── serializers.py       # API serializers
+│   ├── models.py            # 📊 Database models (Listing, Booking, Review)
+│   ├── serializers.py       # 🔄 API serializers (DRF)
 │   ├── views.py             # API views
 │   ├── urls.py              # App URL routing
 │   └── tests.py             # Unit tests
